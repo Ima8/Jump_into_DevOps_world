@@ -1,0 +1,27 @@
+version: "2"
+services:
+  rancher:
+    image: rancher/server:v1.6.17
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - mysql
+    environment:
+      - CATTLE_DB_CATTLE_MYSQL_HOST=mysql ## Your public ip
+      - CATTLE_DB_CATTLE_MYSQL_PORT=3306
+      - CATTLE_DB_CATTLE_MYSQL_NAME=rancher
+      - CATTLE_DB_CATTLE_USERNAME=rancher
+      - CATTLE_DB_CATTLE_PASSWORD=your_password!
+  mysql:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - ./var/lib/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_root_password!
+      - MYSQL_DATABASE=rancher
+      - MYSQL_USER=rancher
+      - MYSQL_PASSWORD=your_password!

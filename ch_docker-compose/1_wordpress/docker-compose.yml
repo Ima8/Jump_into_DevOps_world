@@ -6,7 +6,7 @@ services:
     image: wordpress:latest 
     ports:
       - 8080:80
-    depends_on:
+    links:
       - mysql
     environment:
       WORDPRESS_DB_HOST: mysql
