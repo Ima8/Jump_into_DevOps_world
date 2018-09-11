@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  wordpress:
+    image: wordpress:latest 
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: thisispassword
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - 3306:3306 # change ip if required
+    command: [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci'
+    ]
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: thisispassword
