@@ -1,12 +1,15 @@
-version: "2"
+version: "2.1"
 services:
   rancher:
-    image: rancher/server:v1.6.17
+    image: rancher/server:stable
     restart: always
     ports:
       - "8080:8080"
-    links:
+    links: 
       - mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
     environment:
       - CATTLE_DB_CATTLE_MYSQL_HOST=mysql ## Your public ip
       - CATTLE_DB_CATTLE_MYSQL_PORT=3306
@@ -25,3 +28,8 @@ services:
       - MYSQL_DATABASE=rancher
       - MYSQL_USER=rancher
       - MYSQL_PASSWORD=your_password!
+    healthcheck:
+        test: "/usr/bin/mysql --user=rancher --password=your_password! --execute \"SHOW DATABASES;\""
+        interval: 5s
+        timeout: 60s
+        retries: 10
