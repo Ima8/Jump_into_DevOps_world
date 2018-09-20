@@ -1,0 +1,50 @@
+[mysqld]
+binlog_format=ROW
+default-storage-engine=innodb
+innodb_autoinc_lock_mode=2
+bind-address=0.0.0.0
+
+max_connections=1024
+key_buffer_size= 20M
+table_open_cache = 256
+max_allowed_packet = 32M
+sort_buffer_size = 20M
+read_buffer_size = 20M
+thread_concurrency = 4
+
+# INNODB #
+innodb-flush-method            = O_DIRECT
+innodb-log-files-in-group      = 2
+innodb-log-file-size           = 128M
+innodb-flush-log-at-trx-commit = 1
+innodb-file-per-table          = 1
+innodb-buffer-pool-size        = 2G
+
+
+# Galera Provider Configuration
+wsrep_on=ON
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+
+# Galera Cluster Configuration
+wsrep_cluster_name="production" # Change_here
+wsrep_cluster_address="gcomm://111.111.111.111,222.222.222.222,333.333.333.333" # Change_here
+
+# Galera Synchronization Configuration
+wsrep_sst_method=rsync
+
+# Galera Node Configuration
+wsrep_node_address="111.111.111.111" # Change_here
+wsrep_node_name="Database01" # Change_here
+
+wsrep_slave_threads=4
+
+# change auto_increment_increment and auto_increment_offset automatically
+wsrep_auto_increment_control=1
+
+# enable "strictly synchronous" semantics for read operations
+wsrep_causal_reads=0
+
+# retry autoinc insert, which failed for duplicate key error
+wsrep_drupal_282555_workaround=1
+
+wsrep_retry_autocommit=3
