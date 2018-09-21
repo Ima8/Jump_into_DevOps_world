@@ -1,0 +1,60 @@
+version: '2'
+services:
+  logstash-collector-config:
+    metadata:
+      logstash: &id001
+        inputs: |-
+          udp {
+            port => 5000
+            codec => "plain"
+          }
+        outputs: |-
+          redis {
+            host => "redis.rancher.internal"
+            port => "6379"
+            data_type => "list"
+            key => "logstash"
+          }
+    retain_ip: true
+    scale: 1
+    start_on_create: true
+  logstash-collector:
+    metadata:
+      logstash: *id001
+    retain_ip: true
+    scale: 1
+    start_on_create: true
+  logstash-indexer:
+    metadata:
+      logstash: &id002
+        filters: |-
+          grok {
+                                  match => { "message" => "%{NOTSPACE:time} %{INT:timestamp} %{INT:status_code} %{WORD:method} %{NOTSPACE:host} %{NOTSPACE:client_port} %{IP:client_ip} %{NOTSPACE:Via} %{NOTSPACE:yguid} %{NOTSPACE:query} %{NOTSPACE:byte} %{NOTSPACE:bknd} %{NOTSPACE:bkndq} %{NOTSPACE:srvq} %{NOTSPACE:actconn} %{NOTSPACE:feconn} %{NOTSPACE:beconn} %{NOTSPACE:srvconn} %{NOTSPACE:retr} %{NOTSPACE:Tq} %{NOTSPACE:Tw} %{NOTSPACE:Tc} %{NOTSPACE:Tr} %{NOTSPACE:Tt} %{NOTSPACE:Authorization} %{GREEDYDATA:data}" }
+                                }
+          date {
+              match => [ "time", "dd/MMM/yyyy:HH:mm:ss.SSS" ]
+            }
+        inputs: |-
+          redis {
+            host => "redis.rancher.internal"
+            port => "6379"
+            data_type => "list"
+            key => "logstash"
+          }
+        outputs: |-
+          elasticsearch {
+            hosts => ["elasticsearch.rancher.internal:9200"]
+          }
+          stdout {
+            codec => rubydebug
+          }
+    scale: 1
+    start_on_create: true
+  redis:
+    scale: 1
+    start_on_create: true
+  logstash-indexer-config:
+    metadata:
+      logstash: *id002
+    scale: 1
+    start_on_create: true

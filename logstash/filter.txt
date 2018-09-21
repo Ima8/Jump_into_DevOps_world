@@ -1,0 +1,11 @@
+grok {
+    match => { "message" => "%{NOTSPACE:time} %{INT:timestamp} %{INT:status_code} %{WORD:method} %{NOTSPACE:host} %{NOTSPACE:client_port} %{IP:client_ip} %{NOTSPACE:Via} %{NOTSPACE:yguid} %{NOTSPACE:query} %{NOTSPACE:byte} %{NOTSPACE:bknd} %{NOTSPACE:bkndq} %{NOTSPACE:srvq} %{NOTSPACE:actconn} %{NOTSPACE:feconn} %{NOTSPACE:beconn} %{NOTSPACE:srvconn} %{NOTSPACE:retr} %{NOTSPACE:Tq} %{NOTSPACE:Tw} %{NOTSPACE:Tc} %{NOTSPACE:Tr} %{NOTSPACE:Tt} %{NOTSPACE:Authorization} %{GREEDYDATA:data}" }
+}
+date {
+    match => [ "time", "dd/MMM/yyyy:HH:mm:ss.SSS" ]
+  }
+    
+if "_grokparsefailure" in [tags] { drop {} }
+
+
+

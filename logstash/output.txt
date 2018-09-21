@@ -1,0 +1,6 @@
+elasticsearch {
+            hosts => ["elasticsearch.rancher.internal:9200"]
+          }
+          stdout {
+            codec => rubydebug
+          }

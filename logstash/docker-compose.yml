@@ -1,0 +1,60 @@
+version: '2'
+services:
+  logstash-collector-config:
+    image: rancher/logstash-config:v0.2.0
+    external_links:
+    - es-cluster/es-client:elasticsearch
+    links:
+    - redis:redis
+    labels:
+      io.rancher.container.hostname_override: container_name
+  logstash-collector:
+    image: docker.elastic.co/logstash/logstash:6.2.3
+    stdin_open: true
+    external_links:
+    - es-cluster/es-client:elasticsearch
+    tty: true
+    links:
+    - redis:redis
+    volumes_from:
+    - logstash-collector-config
+    command:
+    - logstash
+    - -f
+    - /etc/logstash
+    labels:
+      io.rancher.scheduler.affinity:host_label: message_broker=true
+      io.rancher.sidekicks: logstash-collector-config
+      io.rancher.container.hostname_override: container_name
+  logstash-indexer:
+    image: docker.elastic.co/logstash/logstash:6.2.3
+    stdin_open: true
+    external_links:
+    - es-cluster/es-client:elasticsearch
+    tty: true
+    links:
+    - redis:redis
+    volumes_from:
+    - logstash-indexer-config
+    command:
+    - logstash
+    - -f
+    - /etc/logstash
+    labels:
+      io.rancher.scheduler.affinity:host_label: name=After5-LB2
+      io.rancher.sidekicks: logstash-indexer-config
+      io.rancher.container.hostname_override: container_name
+  redis:
+    image: redis:3.2.6-alpine
+    stdin_open: true
+    tty: true
+    labels:
+      io.rancher.container.hostname_override: container_name
+  logstash-indexer-config:
+    image: rancher/logstash-config:v0.2.0
+    external_links:
+    - es-cluster/es-client:elasticsearch
+    links:
+    - redis:redis
+    labels:
+      io.rancher.container.hostname_override: container_name

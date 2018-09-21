@@ -1,0 +1,5 @@
+udp {
+      port => 5000
+      codec => "plain"
+}
+
