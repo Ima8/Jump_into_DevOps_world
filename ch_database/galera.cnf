@@ -27,13 +27,13 @@ wsrep_provider=/usr/lib/galera/libgalera_smm.so
 
 # Galera Cluster Configuration
 wsrep_cluster_name="production" # Change_here
-wsrep_cluster_address="gcomm://111.111.111.111,222.222.222.222,333.333.333.333" # Change_here
+wsrep_cluster_address="gcomm://10.130.104.42,10.130.104.44,10.130.104.45" # Change_here
 
 # Galera Synchronization Configuration
 wsrep_sst_method=rsync
 
 # Galera Node Configuration
-wsrep_node_address="111.111.111.111" # Change_here
+wsrep_node_address="10.130.104.42" # Change_here
 wsrep_node_name="Database01" # Change_here
 
 wsrep_slave_threads=4
