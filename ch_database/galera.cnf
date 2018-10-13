@@ -12,6 +12,16 @@ sort_buffer_size = 20M
 read_buffer_size = 20M
 thread_concurrency = 4
 
+## Binlog
+log_bin                 = /var/log/mysql/binlog
+log_bin_index           = /var/log/mysql/binlog.index
+log_warnings = 2
+binlog_format = ROW
+expire_logs_days = 10
+max_binlog_size = 100M
+innodb_flush_log_at_trx_commit = 2
+sync_binlog=0
+
 # INNODB #
 innodb-flush-method            = O_DIRECT
 innodb-log-files-in-group      = 2
