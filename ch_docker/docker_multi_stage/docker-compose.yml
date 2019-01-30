@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  webserver:
+    build: .
+    ports:
+      - 8080:80
