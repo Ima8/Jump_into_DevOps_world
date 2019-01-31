@@ -1,0 +1,59 @@
+version: '2'
+services:
+  mysql:
+   image: mysql:5.7
+   restart: always
+   environment:
+      MYSQL_ROOT_PASSWORD: thisispassword
+      MYSQL_ROOT_HOST: "%"
+  konga:
+    image: pantsel/konga:latest
+    environment:
+      DB_ADAPTER: mysql
+      DB_DATABASE: konga_database2
+      DB_HOST: mysql
+      DB_PASSWORD: thisispassword
+      DB_USER: root
+    stdin_open: true
+    tty: true
+    links:
+      - mysql
+    ports:
+    - 1337:1337/tcp
+    labels:
+      io.rancher.container.pull_image: always
+  kong-migration:
+    image: kong:latest
+    environment:
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_CASSANDRA_CONTACT_POINTS: kong-database
+      KONG_DATABASE: cassandra
+      KONG_NGINX_HTTP_RESOLVER: 8.8.8.8
+    stdin_open: true
+    tty: true
+    links:
+    - kong-database:kong-database
+    command:
+    - kong
+    - migrations
+    - bootstrap
+    - --vv
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.start_once: 'true'
+  kong-database:
+    image: cassandra:3.0
+  kong:
+    image: kong:latest
+    environment:
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_CASSANDRA_CONTACT_POINTS: kong-database
+      KONG_DATABASE: cassandra
+      KONG_NGINX_HTTP_RESOLVER: 8.8.8.8
+    stdin_open: true
+    tty: true
+    links:
+    - kong-database:kong-database
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.sidekicks: kong-migration
