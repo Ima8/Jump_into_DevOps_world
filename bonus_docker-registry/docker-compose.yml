@@ -1,0 +1,32 @@
+version: "3.6"
+
+services:
+  gitlab:
+    restart: always
+    image: gitlab/gitlab-ce:latest
+    hostname: 'gitlab'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url "https://gitlab.local"
+        nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.local.crt"
+        nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.local.key"
+        registry_external_url "https://registry.local"
+        gitlab_rails['registry_host'] = "registry"
+        registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/registry.local.crt"
+        registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/registry.local.key"
+    ports:
+      - "22:22"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./gitlab/data:/var/opt/gitlab
+      - ./gitlab/logs:/var/log/gitlab
+      - ./gitlab/config:/etc/gitlab
+      - ./ssl:/etc/gitlab/ssl
+  
+  registry:
+    restart: always
+    image: registry:2
+    hostname: 'registry'
+    volumes:
+      - ./registry/data:/var/lib/registry
