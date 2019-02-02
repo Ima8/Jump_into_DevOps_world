@@ -1,5 +1,4 @@
 [mysqld]
-binlog_format=ROW
 default-storage-engine=innodb
 innodb_autoinc_lock_mode=2
 bind-address=0.0.0.0
@@ -26,7 +25,6 @@ sync_binlog=0
 innodb-flush-method            = O_DIRECT
 innodb-log-files-in-group      = 2
 innodb-log-file-size           = 128M
-innodb-flush-log-at-trx-commit = 1
 innodb-file-per-table          = 1
 innodb-buffer-pool-size        = 2G
 
