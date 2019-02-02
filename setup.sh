@@ -6,6 +6,6 @@ sudo apt-get update
 apt-cache policy docker-ce
 sudo apt-get install -y docker-ce=18.03.1~ce-0~ubuntu 
 sudo usermod -aG docker ${USER}
-newgrp docker
 sudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
+newgrp docker
