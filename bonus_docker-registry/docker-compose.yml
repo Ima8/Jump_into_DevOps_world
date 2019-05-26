@@ -15,18 +15,15 @@ services:
         registry_nginx['ssl_certificate'] = "/etc/gitlab/ssl/registry.local.crt"
         registry_nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/registry.local.key"
     ports:
-      - "22:22"
+      - "8022:22"
       - "80:80"
       - "443:443"
     volumes:
-      - ./gitlab/data:/var/opt/gitlab
-      - ./gitlab/logs:/var/log/gitlab
-      - ./gitlab/config:/etc/gitlab
+      - gitlab_data:/var/opt/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - gitlab_config:/etc/gitlab
       - ./ssl:/etc/gitlab/ssl
-  
-  registry:
-    restart: always
-    image: registry:2
-    hostname: 'registry'
-    volumes:
-      - ./registry/data:/var/lib/registry
+volumes:
+  gitlab_data:
+  gitlab_logs:
+  gitlab_config:
