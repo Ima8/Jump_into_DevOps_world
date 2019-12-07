@@ -5,7 +5,7 @@ services:
   wordpress:
     image: wordpress:latest 
     volumes:
-      - ./wp-app:/var/www/html 
+      - ./wp_app:/var/www/html 
     ports:
       - 8080:80
     links:
@@ -25,7 +25,7 @@ services:
         '--collation-server=utf8mb4_unicode_ci'
     ]
     volumes:
-      - ./wp-data:/var/lib/mysql
+      - ./wp_data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: wordpress
       MYSQL_ROOT_PASSWORD: thisispassword
