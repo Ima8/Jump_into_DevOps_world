@@ -4,7 +4,7 @@ sudo true
 #sudo apt-get install apt-transport-https
 sudo apt-get update
 #apt-cache policy docker-ce
-curl https://releases.rancher.com/install-docker/18.09.sh | sh
+curl https://releases.rancher.com/install-docker/19.03.sh | sh
 #sudo apt-get install -y docker-ce=18.03.1~ce-0~ubuntu 
 sudo usermod -aG docker ${USER}
 sudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
